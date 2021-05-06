@@ -7,21 +7,25 @@ app = Flask(__name__)
 @app.route('/get', methods=['GET'])
 def get():
     jsonData = crud.get()
-    response = jsonify(message=jsonData)   
+    response = jsonify(cars=jsonData)   
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 @app.route('/insert', methods=['Post'])
 def insert():
     jsonData = request.data
-    crud.insert(jsonData)
+    
+    response = jsonify(cars=jsonData) 
+    #data = crud.insert(response) 
     response.headers.add("Access-Control-Allow-Origin", "*")
-    return jsonData
+    dataJson = json.dumps(response)
+    return str(dataJson)
 
 @app.route('/update', methods=['PUT'])
 def update():
     jsonData = request.data
-    crud.update(jsonData)
+    data = crud.insert(jsonData)
+    response = jsonify(cars=data)  
     response.headers.add("Access-Control-Allow-Origin", "*")
     return jsonData
 
@@ -30,7 +34,7 @@ def update():
 def delete():
     jsonData = request.data
     response.headers.add("Access-Control-Allow-Origin", "*")
-    return jsonData
+    return data
 
 
 
