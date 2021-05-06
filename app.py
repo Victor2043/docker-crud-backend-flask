@@ -1,31 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May  6 10:54:17 2021
-
-@author: Victo
-"""
-
 from flask import Flask, jsonify, request
 import json
+import crud
 
 app = Flask(__name__)
 
 @app.route('/get', methods=['GET'])
 def get():
-    jsonData = {}
-    jsonData['carros'] = []
-    jsonData['carros'].append({
-                'modelo': "Chevrolet Onix",
-                'marca': "chevrolet",
-                "cor":"laranja",
-                "placa":"AFS-4123"
-            })
-    jsonData['carros'].append({
-                'modelo': "Chevrolet Onix",
-                'marca': "chevrolet",
-                "cor":"laranja",
-                "placa":"AFS-4123"
-            })
+    jsonData = crud.get()
     response = jsonify(message=jsonData)   
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
@@ -33,12 +14,14 @@ def get():
 @app.route('/insert', methods=['Post'])
 def insert():
     jsonData = request.data
+    crud.insert(jsonData)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return jsonData
 
 @app.route('/update', methods=['PUT'])
 def update():
     jsonData = request.data
+    crud.update(jsonData)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return jsonData
 
@@ -48,7 +31,6 @@ def delete():
     jsonData = request.data
     response.headers.add("Access-Control-Allow-Origin", "*")
     return jsonData
-
 
 
 
