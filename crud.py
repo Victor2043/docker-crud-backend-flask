@@ -1,27 +1,52 @@
 import sqlite3
+import json
 
-conn = sqlite3.connect('carros.db')
+def cursor_DB():
+    conn = sqlite3.connect('carros.db')
+    cursor = conn.cursor()
+    return cursor
 
-cursor = conn.cursor()
+def get():
+    conn = sqlite3.connect('carros.db')
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM carros""")
+    data = cursor.fetchall()
+    jsonData = {}
+    jsonData['carros'] = []
+    for i in range(0, len(data)):
+        jsonData['carros'].append({
+            'id': data[i][0],
+            'modelo': data[i][1],
+            'marca': data[i][2],
+            'cor': data[i][3],
+            'placa': data[i][4]
+            })
+    #data = json.dumps(data)
 
-cursor.execute("""
-INSERT INTO carros (modelo, marca, cor, placa)
-VALUES ('Lancer', Mitsubishi, 'preto', 'FPS-1512)
-""")
+    conn.commit()
+    conn.close()
+    return jsonData
 
-cursor.execute("""
-INSERT INTO carros (modelo, marca, cor, placa)
-VALUES ('Tracker', Chevrolet, 'branco', 'COD-3412)
-""")
+def insert(jsonData):
+    conn = sqlite3.connect('carros.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO carros (modelo, marca, cor, placa) VALUES (? , ?, ?, ?)",
+    (jsonData['modelo'], jsonData['marca'], jsonData['cor'], jsonData['placa']))
+    conn.commit()
+    conn.close()
 
-cursor.execute("""
-INSERT INTO carros (modelo, marca, cor, placa)
-VALUES ('Kicks', Nissan , 'vermelho', 'GOW-6632)
-""")
+def update(jsonData):
+    conn = sqlite3.connect('carros.db')
+    cursor = conn.cursor()
+    cursor.execute("""UPDATE carros SET modelo = ? ,
+     marca = ? , cor = ?,  placa = ?  WHERE id = 4""",
+    (jsonData['modelo'], jsonData['marca'], jsonData['cor'], jsonData['placa']))
+    conn.commit()
+    conn.close()
 
-conn.commit()
-
-print('Dados inseridos com sucesso.')
-
-
-conn.close()
+def delete(jsonData):
+    conn = sqlite3.connect('carros.db')
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM carros where id = ?", jsonData['id'])
+    conn.commit()
+    conn.close()

@@ -1,56 +1,39 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May  6 10:54:17 2021
-
-@author: Victo
-"""
-
 from flask import Flask, jsonify, request
 import json
+import crud
 
 app = Flask(__name__)
 
 @app.route('/get', methods=['GET'])
 def get():
-    jsonData = {}
-    jsonData['carros'] = []
-    jsonData['carros'].append({
-                'modelo': "Chevrolet Onix",
-                'marca': "chevrolet",
-                "cor":"laranja",
-                "placa":"AFS-4123"
-            })
-    jsonData['carros'].append({
-                'modelo': "Chevrolet Onix",
-                'marca': "chevrolet",
-                "cor":"laranja",
-                "placa":"AFS-4123"
-            })
-    response = jsonify(message=jsonData)   
+    jsonData = crud.get()
+    response = jsonify(cars=jsonData)   
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 @app.route('/insert', methods=['Post'])
 def insert():
-    jsonData = request.data
+    jsonData = json.loads(request.data)
+    crud.insert(jsonData)
+    response = jsonify(message="carro inserico.") 
     response.headers.add("Access-Control-Allow-Origin", "*")
-    return jsonData
+    return response
 
 @app.route('/update', methods=['PUT'])
 def update():
-    jsonData = request.data
+    jsonData = json.loads(request.data)
+    crud.update(jsonData)
+    response = jsonify(message="carro atualizado.") 
     response.headers.add("Access-Control-Allow-Origin", "*")
-    return jsonData
-
+    return response
 
 @app.route('/delete', methods=['DELETE'])
 def delete():
-    jsonData = request.data
+    carId = json.loads(request.data)
+    crud.delete(carId)
+    response = jsonify(message="carro excluido") 
     response.headers.add("Access-Control-Allow-Origin", "*")
-    return jsonData
-
-
-
+    return response
 
 if __name__ == '__main__':
     app.run(debug=False)
