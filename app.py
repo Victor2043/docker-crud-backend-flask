@@ -13,9 +13,6 @@ def get():
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-
-
-
 @app.route('/insert', methods=['POST'])
 @cross_origin()
 def insert():
@@ -39,5 +36,6 @@ def delete(id):
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-if __name__ == '__main__':
-    app.run(debug=False)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True, port=80)
