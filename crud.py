@@ -39,14 +39,14 @@ def update(jsonData):
     conn = sqlite3.connect('carros.db')
     cursor = conn.cursor()
     cursor.execute("""UPDATE carros SET modelo = ? ,
-     marca = ? , cor = ?,  placa = ?  WHERE id = ?""",
-    (jsonData['modelo'], jsonData['marca'], jsonData['cor'], jsonData['placa'], jsonData['id']))
+     marca = ? , cor = ?,  placa = ?  WHERE id = """ + jsonData['id'],
+    (jsonData['modelo'], jsonData['marca'], jsonData['cor'], jsonData['placa']))
     conn.commit()
     conn.close()
 
 def delete(id):
     conn = sqlite3.connect('carros.db')
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM carros where id = ?", str(id))
+    cursor.execute("DELETE FROM carros where id = " + id)
     conn.commit()
     conn.close()
