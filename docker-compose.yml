@@ -1,0 +1,11 @@
+version: "3"
+services:
+  front:
+    #build: .
+    image: "dash7/crud-frontend-angular:1.0"
+    ports:
+      - "8080:80"
+  back:
+    image: "dash7/crud-backend:1.0"
+    ports:
+        - "5000:80"
